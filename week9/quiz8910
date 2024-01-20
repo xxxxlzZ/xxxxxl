@@ -1,0 +1,25 @@
+CREATE TABLE team (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    teamName VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE score (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    teamid INT,
+    userid INT,
+    score INT,
+    FOREIGN KEY (teamid) REFERENCES team(id),
+    FOREIGN KEY (userid) REFERENCES user(id)
+);
+
+SELECT user.*
+FROM user
+JOIN score ON user.id = score.userid
+JOIN team ON score.teamid = team.id
+WHERE team.teamName = 'ECNU' AND user.age < 20;
+
+SELECT team.teamName, COALESCE(SUM(score.score), 0) AS totalScore
+FROM team
+LEFT JOIN score ON team.id = score.teamid
+WHERE team.teamName = 'ECNU'
+GROUP BY team.teamName;
